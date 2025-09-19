@@ -1,39 +1,55 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+import { env } from './config/environment';
+import { CONNECT_DB, CLOSE_DB } from './config/postgreSQL';
+import exitHook from 'async-exit-hook';
+import { APIs_v1 } from '~/routes/v1';
 
-// Load environment variables
-dotenv.config();
+const START_SERVER = () => {
+  const app: Express = express();
 
-const app: Express = express();
-const PORT: number = parseInt(process.env.PORT || '3000', 10);
+  // Middleware
+  app.use(express.json());
+  // app.use(cors());
+  app.use(express.urlencoded({ extended: true }));
+  app.use('/v1/', APIs_v1);
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Basic route
-app.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'Welcome to Burger Queen Backend API!',
-    timestamp: new Date().toISOString(),
-    environment: process.env.BUILD_MODE || 'development'
+  // Basic route
+  app.get('/', (req: Request, res: Response) => {
+    res.json({
+      message: 'Burger Queen API is running!',
+      environment: env.BUILD_MODE,
+      author: env.AUTHOR
+    });
   });
-});
 
-// Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({
-    status: 'OK',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString()
+  // Start server
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
+    console.log(`🚀 Burger Queen Backend is running on port ${env.APP_PORT}`);
+    console.log(`📍 Environment: ${env.BUILD_MODE}`);
+    console.log(`🌐 Server URL: http://${env.APP_HOST}:${env.APP_PORT}`);
+    console.log(`👨‍💻 Author: ${env.AUTHOR}`);
   });
-});
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Burger Queen Backend is running on port ${PORT}`);
-  console.log(`📍 Environment: ${process.env.BUILD_MODE || 'development'}`);
-  console.log(`🌐 Server URL: http://localhost:${PORT}`);
-});
+  exitHook (async () => {
+    console.log('Server is shutting down...');
+    await CLOSE_DB();
+    console.log('disconnecting from database...');
+    console.log('Shutdown complete.');
+    process.exit();
+  });
+};
+
+(async () => {
+  try {
+    console.log('Connecting to PostgreSQL database...');
+    await CONNECT_DB();
+    console.log('PostgreSQL database connected successfully.');
+    START_SERVER();
+    console.log('Server started successfully.');
+  }
+  catch (error) {
+    console.error('Something went wrong', error);
+  }
+})();
+

@@ -12,7 +12,7 @@
     "clean": "rm -rf build && mkdir build",
     "build": "tsc",
     "production": "npm run build && cross-env BUILD_MODE=production node ./build/server.js",
-    "dev": "cross-env BUILD_MODE=dev nodemon --exec ts-node ./src/server.ts"
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -28,20 +28,24 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.15.0",
-    "multer": "^1.4.5-lts.2"
+    "multer": "^1.4.5-lts.2",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
+    "@types/async-exit-hook": "^2.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.3.0",
+    "@types/pg": "^8.15.5",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
     "eslint": "^8.47.0",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }
