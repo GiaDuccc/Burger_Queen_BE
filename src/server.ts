@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import { env } from './config/environment';
-import { CONNECT_DB, CLOSE_DB } from './config/postgreSQL';
+import { CONNECT_DB, CLOSE_DB } from './config/mongodb';
 import exitHook from 'async-exit-hook';
 import { APIs_v1 } from '~/routes/v1';
 
@@ -42,9 +42,9 @@ const START_SERVER = () => {
 
 (async () => {
   try {
-    console.log('Connecting to PostgreSQL database...');
+    console.log('Connecting to MongoDB database...');
     await CONNECT_DB();
-    console.log('PostgreSQL database connected successfully.');
+    console.log('MongoDB database connected successfully.');
     START_SERVER();
     console.log('Server started successfully.');
   }
