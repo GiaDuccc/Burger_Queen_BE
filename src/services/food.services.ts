@@ -17,12 +17,7 @@ export const createNew = async (reqBody: createFoodRequest): Promise<createFoodR
 
     if (!newFood) throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Create food failed');
 
-    const { _id, ...rest } = newFood;
-
-    return {
-      foodId: newFood._id?.toString() || '',
-      ...rest
-    };
+    return newFood;
 
   } catch (error: any) {
     throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, `Food creation failed: ${error.message}`);

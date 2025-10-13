@@ -1,6 +1,8 @@
+import { ObjectId } from "mongodb";
+
 export interface createBranchResponse {
-  branchId: string;
-  companyId: string;
+  _id?: ObjectId;
+  companyId: ObjectId;
   branchName: string;
   address: string;
   phoneNumber: string;

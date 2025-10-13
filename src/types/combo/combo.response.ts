@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 export interface createComboResponse {
-  comboId: ObjectId;
+  _id?: ObjectId;
   comboName: string;
   description: string;
   price: number;

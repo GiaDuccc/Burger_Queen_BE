@@ -5,6 +5,8 @@ import { companyRoute } from './company.routes';
 import { branchRoute } from './branch.routes';
 import { userRoute } from './user.routes';
 import { comboRoute } from './combo.routes';
+import { authRoute } from './auth.routes';
+import { employeeRoute } from './employee.routes';
 
 const Router = express.Router();
 
@@ -21,4 +23,6 @@ Router.use('/combo', comboRoute);
 Router.use('/company', companyRoute);
 Router.use('/branch', branchRoute);
 Router.use('/user', userRoute);
+Router.use('/auth', authRoute);
+Router.use('/employee', employeeRoute)
 export const APIs_v1 = Router;

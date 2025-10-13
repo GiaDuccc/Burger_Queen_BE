@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export interface createFoodResponse {
-  foodId: string;
+  _id?: ObjectId;
   foodName: string;
   foodType: string;
   favor: string;

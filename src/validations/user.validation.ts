@@ -19,6 +19,7 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
       'string.min': "phoneNumber must be at least 10 characters",
       'string.max': "phoneNumber must be at most 15 characters"
     }),
+    userType: Joi.string().valid('customer', 'employee'),
     address: Joi.string().min(3).max(256).required().messages({
       'any.required': "address is required",
       'string.min': "address must be at least 3 characters",

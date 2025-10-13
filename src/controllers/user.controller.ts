@@ -34,8 +34,10 @@ const getUserDetail = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
+
+
 export const userController = {
   createNew,
   getAllUser,
-  getUserDetail
+  getUserDetail,
 }
