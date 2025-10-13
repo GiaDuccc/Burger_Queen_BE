@@ -11,7 +11,7 @@ interface EnvironmentConfig {
   CLOUDINARY_NAME: string;
   CLOUDINARY_API_KEY: string;
   CLOUDINARY_API_SECRET: string;
-  JWT_SECRET: string;
+  JWT_ACCESS_SECRET: string;
   JWT_REFRESH_SECRET: string;
   // DB_HOST: string;
   // DB_PORT: number;
@@ -56,7 +56,7 @@ export const env: EnvironmentConfig = {
   CLOUDINARY_API_KEY: getEnvVar('CLOUDINARY_API_KEY'),
   CLOUDINARY_API_SECRET: getEnvVar('CLOUDINARY_API_SECRET'),
 
-  JWT_SECRET: getEnvVar('JWT_SECRET'),
+  JWT_ACCESS_SECRET: getEnvVar('JWT_ACCESS_SECRET'),
   JWT_REFRESH_SECRET: getEnvVar('JWT_REFRESH_SECRET'),
   // DB_HOST: getEnvVar('DB_HOST', 'localhost'),
   // DB_PORT: getEnvNumber('DB_PORT', 5432),

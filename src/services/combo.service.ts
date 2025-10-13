@@ -11,12 +11,7 @@ const createNew = async (reqBody: createComboRequest): Promise<createComboRespon
   
     if (!newCombo) throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Create combo failed');
   
-    const { _id, ...rest } = newCombo;
-    
-    return {
-      comboId: newCombo._id as ObjectId,
-      ...rest,
-    }
+    return newCombo;
   } catch (error: any) {
     throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }

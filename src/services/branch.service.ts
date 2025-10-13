@@ -12,13 +12,7 @@ const createNew = async (payload: createBranchRequest): Promise<createBranchResp
 
     if (!newBranch) throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Create branch failed');
 
-    const {  _id, ...rest } = newBranch;
-
-    return {
-      branchId: newBranch._id?.toString() || '',
-      ...rest,
-      companyId: newBranch.companyId.toString()
-    };
+    return newBranch;
 
   } catch (error: any) { throw new Error(error.message) };
 };

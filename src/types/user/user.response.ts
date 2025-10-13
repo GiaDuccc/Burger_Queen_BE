@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export interface createUserResponse {
-  userId: string;
+  _id?: ObjectId;
   fullName: string;
   email: string;
   phoneNumber: string;
