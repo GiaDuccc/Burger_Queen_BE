@@ -5,6 +5,7 @@ import { CONNECT_DB, CLOSE_DB } from './config/mongodb';
 import exitHook from 'async-exit-hook';
 import { APIs_v1 } from '~/routes/v1';
 import cookieParser from 'cookie-parser';
+import { errorHandlingMiddleware } from './middlewares/errorHandling.middleware';
 
 const START_SERVER = () => {
   const app: Express = express();
@@ -12,9 +13,10 @@ const START_SERVER = () => {
   // Middleware
   app.use(express.json());
   app.use(cookieParser());
-  // app.use(cors());
+  app.use(cors());
   app.use(express.urlencoded({ extended: true }));
   app.use('/v1/', APIs_v1);
+  app.use(errorHandlingMiddleware);
 
   // Basic route
   app.get('/', (req: Request, res: Response) => {

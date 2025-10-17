@@ -4,18 +4,18 @@ import { env } from '~/config/environment';
 const ACCESS_TOKEN_SECRET = env.JWT_ACCESS_SECRET;
 const REFRESH_TOKEN_SECRET = env.JWT_REFRESH_SECRET;
 
-const generateAccessToken = (user: { id: string; role: string }) => {
+const generateAccessToken = (user: { userId: string; role: string }) => {
 
   return jwt.sign(
-    { userId: user.id, role: user.role },
+    { sub: user.userId, role: user.role },
     ACCESS_TOKEN_SECRET,
     { expiresIn: '15m' }
   );
 }
 
-const generateRefreshToken = (user: { id: string; role: string }) => {
+const generateRefreshToken = (user: { userId: string; role: string }) => {
   return jwt.sign(
-    { userId: user.id, role: user.role },
+    { sub: user.userId, role: user.role },
     REFRESH_TOKEN_SECRET,
     { expiresIn: '7d' }
   );

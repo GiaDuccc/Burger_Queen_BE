@@ -12,6 +12,17 @@ const saveRefreshToken = async (userId: string, refreshToken: string) => {
   )
 }
 
+const clearRefreshToken = async (userId: string) => {
+  await GET_DB().collection(userModel.USER_COLLECTION_NAME).updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { 
+      refreshToken: null,
+      updatedAt: new Date()
+    } }
+  )
+}
+
 export const authModel = {
-  saveRefreshToken
+  saveRefreshToken,
+  clearRefreshToken
 }
