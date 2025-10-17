@@ -34,10 +34,18 @@ const getUserDetail = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-
+const getMyInfo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const myInfo = await userService.getMyInfo(req.headers.authorization?.toString() || "");
+    res.status(StatusCodes.OK).json(myInfo);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export const userController = {
   createNew,
   getAllUser,
   getUserDetail,
+  getMyInfo
 }

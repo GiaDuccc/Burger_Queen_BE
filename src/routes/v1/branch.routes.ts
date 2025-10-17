@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { branchController } from '~/controllers/branch.controller';
+import { authenticateToken } from '~/middlewares/auth.middleware';
 import { branchValidation } from '~/validations/branch.validation';
 
 const Router = express.Router();
