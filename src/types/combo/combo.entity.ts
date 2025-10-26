@@ -9,6 +9,7 @@ export interface comboEntity {
     foodId: ObjectId;
     quantity: number;
   }[];
+  imageUrl: string;
   status: boolean;
   createdAt: string;
   updatedAt: string;

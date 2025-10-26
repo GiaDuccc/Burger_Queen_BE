@@ -35,8 +35,19 @@ const getComboDetail = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
+const deleteCombo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const comboId = req.params.id;
+    const result = await comboModel.deleteCombo(comboId);
+    res.status(StatusCodes.OK).json({ message: result });
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message));
+  }
+}
+
 export const comboController = {
   createNew,
   getAllCombo,
-  getComboDetail
+  getComboDetail,
+  deleteCombo
 }

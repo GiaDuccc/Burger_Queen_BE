@@ -9,6 +9,7 @@ Router.route('/')
   .post(comboValidation.createNew, comboController.createNew);
 
 Router.route('/:id')
-  .get(comboController.getComboDetail);
+  .get(comboController.getComboDetail)
+  .delete(comboController.deleteCombo);
 
 export const comboRoute = Router;
