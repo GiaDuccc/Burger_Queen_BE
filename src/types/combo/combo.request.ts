@@ -6,4 +6,5 @@ export interface createComboRequest {
     foodId: string;
     quantity: number;
   }[];
+  imageUrl: string;
 }

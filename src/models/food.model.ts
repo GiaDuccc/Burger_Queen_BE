@@ -2,16 +2,19 @@ import Joi from 'joi'
 import { GET_DB } from '~/config/mongodb'
 import { foodEntity } from '~/types/food/food.entity'
 import { createFoodRequest } from '~/types/food/food.request'
-import { InsertOneResult, ObjectId } from 'mongodb'
+import { Document, InsertOneResult, ObjectId, DeleteResult} from 'mongodb'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes/build/cjs/status-codes'
 
 const FOOD_COLLECTION_NAME = 'foods'
 const FOOD_COLLECTION_SCHEMA = Joi.object({
   foodName: Joi.string().min(3).max(256).required(),
-  foodType: Joi.string().min(3).max(256).valid('burger', 'chicken', 'drink', 'chips').required(),
+  normalizedName: Joi.string().min(3).max(256).required(),
+  foodType: Joi.string().min(3).max(256).valid('burger', 'chicken', 'drink', 'fries').required(),
+  description: Joi.string().min(3).required(),
   favor: Joi.string().min(3).max(256).required(),
   price: Joi.number().min(0).required(),
+  imageUrl: Joi.string().uri().required(),
   status: Joi.boolean().default(true),
   createdAt: Joi.date().default(new Date()),
   updatedAt: Joi.date().default(new Date())
@@ -54,8 +57,61 @@ const getAllFood = async (): Promise<foodEntity[]> => {
   }
 }
 
+const getAllFoodbyType = async (foodType: string): Promise<foodEntity[]> => {
+  try {
+    return await GET_DB().collection<foodEntity>(FOOD_COLLECTION_NAME).find({ foodType: foodType }).toArray();
+  } catch (error: any) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "No food found");
+  }
+}
+
+const getFoodType = async (): Promise<Document[]> => {
+  try {
+    const foodTypes = await GET_DB().collection(FOOD_COLLECTION_NAME).aggregate([
+      {
+        $group: { _id: "$foodType" }
+      },
+      {
+        $sort: { _id: 1 }
+      },
+      {
+        $project: { _id: 0, foodType: "$_id" }
+      }
+    ]).toArray();
+    return foodTypes;
+  } catch (error: any) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "No food type found");
+  }
+}
+
+const deleteFood = async (foodId: string): Promise<string> => {
+  try {
+    const result = await GET_DB().collection<foodEntity>(FOOD_COLLECTION_NAME).deleteOne({
+      _id: new ObjectId(foodId)
+    });
+    return `deleted ${result.deletedCount > 0 ? 'successfully' : 'failed'} ${result.deletedCount} document(s)`;
+  } catch (error: any) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "No food found to delete by id");
+  }
+}
+
+const searchFood = async (keyword: string): Promise<foodEntity[]> => {
+  const result = await GET_DB().collection<foodEntity>(FOOD_COLLECTION_NAME).find({
+    $or: [
+      { foodName: { $regex: keyword, $options: 'i' } },
+      { foodType: { $regex: keyword, $options: 'i' } },
+      { normalizedName: { $regex: keyword, $options: 'i' } },
+    ]
+  }).toArray();
+  return result;
+}
+
 export const foodModel = {
   createNew,
   findOneById,
-  getAllFood
+  getAllFood,
+  getAllFoodbyType,
+  getFoodType,
+  deleteFood,
+  searchFood
 }

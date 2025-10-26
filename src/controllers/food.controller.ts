@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { get } from 'http';
 import { StatusCodes } from 'http-status-codes';
 import { foodModel } from '~/models/food.model';
 import { foodService } from '~/services/food.services';
@@ -33,8 +32,53 @@ const getAllFood = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getAllFoodbyType = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const foodType = req.query.foodType as string;
+    const result = await foodModel.getAllFoodbyType(foodType);
+    res.status(StatusCodes.OK).json(result);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message));
+  }
+};
+
+const getFoodType = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await foodModel.getFoodType();
+    res.status(StatusCodes.OK).json(result);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message));
+  }
+}
+
+const deleteFood = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const foodId = req.params.id;
+    console.log(foodId)
+    const result = await foodModel.deleteFood(foodId);
+    res.status(StatusCodes.OK).json({ message: result });
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message));
+  }
+};
+
+const searchFood = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const keyword = req.query.keyword as string;
+    if (!keyword) return res.json([]);
+    const result = await foodModel.searchFood(keyword);
+    res.status(StatusCodes.OK).json(result);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message));
+  }
+};
+
 export const foodController = {
   createNew,
   getFoodDetail,
-  getAllFood
+  getAllFood,
+  getAllFoodbyType,
+  getFoodType,
+  deleteFood,
+  searchFood
 };

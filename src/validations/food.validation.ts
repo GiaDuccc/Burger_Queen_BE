@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express"
 import Joi from "joi"
 import { StatusCodes } from "http-status-codes"
 import ApiError from "~/utils/ApiError"
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators"
 
 const createNew = async (req: Request, res: Response, next: NextFunction) => {
   const schema = Joi.object({
@@ -11,11 +10,16 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
       'string.min': "foodName must be at least 3 characters",
       'string.max': "foodName must be at most 256 characters"
     }),
-    foodType: Joi.string().min(3).max(256).valid('burger', 'chicken', 'drink', 'chips').required().messages({
+    foodType: Joi.string().min(3).max(256).valid('burger', 'chicken', 'drink', 'fries').required().messages({
       'any.required': "foodType is required",
       'string.min': "foodType must be at least 3 characters",
       'string.max': "foodType must be at most 256 characters",
-      'any.only': "foodType must be one of the following: burger, chicken, drink, chips"
+      'any.only': "foodType must be one of the following: burger, chicken, drink, fries"
+    }),
+    description: Joi.string().min(3).required().messages({
+      'any.required': "description is required",
+      'string.min': "description must be at least 3 characters",
+      'string.max': "description must be at most 512 characters"
     }),
     favor: Joi.string().min(3).max(256).required().messages({
       'any.required': "favor is required",
@@ -25,6 +29,10 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
     price: Joi.number().min(0).required().messages({
       'any.required': "price is required",
       'number.min': "price must be at least 0"
+    }),
+    imageUrl: Joi.string().uri().required().messages({
+      'any.required': "image is required",
+      'string.uri': "image must be a valid URL"
     })
   })
   try {

@@ -1,4 +1,4 @@
-import { InsertOneResult, ObjectId } from "mongodb"
+import { InsertOneResult, ObjectId, DeleteResult } from "mongodb"
 import { comboEntity } from "~/types/combo/combo.entity"
 import { createComboRequest } from "~/types/combo/combo.request"
 import Joi from "joi"
@@ -17,7 +17,11 @@ const COMBO_COLLECTION_SCHEMA = Joi.object({
       foodId: Joi.string().pattern(OBJECT_ID_RULE).required(),
       quantity: Joi.number().min(1).required()
     })
-  )
+  ),
+  imageUrl: Joi.string().uri().required(),
+  status: Joi.boolean().default(true),
+  createdAt: Joi.date().default(new Date()),
+  updatedAt: Joi.date().default(new Date())
 })
 
 const validateBeforeCreate = async (combo: createComboRequest): Promise<comboEntity> => {
@@ -56,8 +60,20 @@ const getAllCombo = async (): Promise<comboEntity[]> => {
   return await GET_DB().collection<comboEntity>(COMBO_COLLECTION_NAME).find({}).toArray();
 };
 
+const deleteCombo = async (comboId: string): Promise<string> => {
+  try {
+    const result = await GET_DB().collection<comboEntity>(COMBO_COLLECTION_NAME).deleteOne({
+      _id: new ObjectId(comboId)
+    });
+    return `deleted ${result.deletedCount > 0 ? 'successfully' : 'failed'} ${result.deletedCount} document(s)`;
+  } catch (error: any) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+  }
+};
+
 export const comboModel = {
   createNew,
   findOneById,
-  getAllCombo
+  getAllCombo,
+  deleteCombo
 }

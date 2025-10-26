@@ -30,13 +30,17 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
           'number.min': "quantity must be at least 1"
         })
       })
-    )
+    ),
+    imageUrl: Joi.string().uri().required().messages({
+      'any.required': "imageUrl is required",
+      'string.uri': "imageUrl must be a valid URL"
+    })
   })
   try {
     await schema.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error: any) {
-    next(new ApiError(StatusCodes.BAD_REQUEST, error.details));
+    next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
   }
 }
 export const comboValidation = {
