@@ -73,6 +73,16 @@ const searchFood = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const updateFood = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const foodId = req.params.id;
+    const updatedFood = await foodService.updateFood(foodId, req.body);
+    res.status(StatusCodes.OK).json(updatedFood);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, error.message));
+  }
+}
+
 export const foodController = {
   createNew,
   getFoodDetail,
@@ -80,5 +90,6 @@ export const foodController = {
   getAllFoodbyType,
   getFoodType,
   deleteFood,
-  searchFood
+  searchFood,
+  updateFood
 };

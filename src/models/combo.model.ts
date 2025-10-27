@@ -1,4 +1,4 @@
-import { InsertOneResult, ObjectId, DeleteResult } from "mongodb"
+import { InsertOneResult, ObjectId, DeleteResult, UpdateResult } from "mongodb"
 import { comboEntity } from "~/types/combo/combo.entity"
 import { createComboRequest } from "~/types/combo/combo.request"
 import Joi from "joi"
@@ -71,9 +71,19 @@ const deleteCombo = async (comboId: string): Promise<string> => {
   }
 };
 
+const updateCombo = async (comboId: string, data: createComboRequest): Promise<UpdateResult> => {
+  const validatedCombo = await validateBeforeCreate(data);
+  const result = await GET_DB().collection<comboEntity>(COMBO_COLLECTION_NAME).updateOne(
+    { _id: new ObjectId(comboId) },
+    { $set: { ...validatedCombo, updatedAt: new Date() } }
+  );
+  return result;
+}
+
 export const comboModel = {
   createNew,
   findOneById,
   getAllCombo,
-  deleteCombo
+  deleteCombo,
+  updateCombo
 }

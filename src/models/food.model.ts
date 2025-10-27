@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { GET_DB } from '~/config/mongodb'
 import { foodEntity } from '~/types/food/food.entity'
 import { createFoodRequest } from '~/types/food/food.request'
-import { Document, InsertOneResult, ObjectId, DeleteResult} from 'mongodb'
+import { Document, InsertOneResult, ObjectId, UpdateResult} from 'mongodb'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes/build/cjs/status-codes'
 
@@ -106,6 +106,17 @@ const searchFood = async (keyword: string): Promise<foodEntity[]> => {
   return result;
 }
 
+const updateFood = async (foodId: string, data: createFoodRequest): Promise<UpdateResult> => {
+  const validatedFood = await validateBeforeCreate(data);
+
+  const result = await GET_DB().collection<foodEntity>(FOOD_COLLECTION_NAME).updateOne(
+    { _id: new ObjectId(foodId) },
+    { $set: { ...validatedFood, updatedAt: new Date() } }
+  );
+
+  return result;
+};
+
 export const foodModel = {
   createNew,
   findOneById,
@@ -113,5 +124,6 @@ export const foodModel = {
   getAllFoodbyType,
   getFoodType,
   deleteFood,
-  searchFood
+  searchFood,
+  updateFood
 }

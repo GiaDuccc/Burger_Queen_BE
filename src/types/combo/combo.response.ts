@@ -11,6 +11,6 @@ export interface createComboResponse {
   }[];
   imageUrl: string;
   status: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
