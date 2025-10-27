@@ -19,6 +19,7 @@ Router.route('/getAllFoodbyType')
 
 Router.route('/:id')
   .get( foodController.getFoodDetail)
+  .put( foodValidation.createNew, foodController.updateFood)
   .delete(foodController.deleteFood);
 
 export const foodRoute = Router;

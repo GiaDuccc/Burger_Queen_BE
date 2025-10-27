@@ -45,9 +45,20 @@ const deleteCombo = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const updateCombo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const comboId = req.params.id;
+    const updatedCombo = await comboService.updateCombo(comboId, req.body);
+    res.status(StatusCodes.OK).json(updatedCombo);
+  } catch (error: any) {
+    next(error);
+  }
+}
+
 export const comboController = {
   createNew,
   getAllCombo,
   getComboDetail,
+  updateCombo,
   deleteCombo
 }

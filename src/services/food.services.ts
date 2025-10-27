@@ -20,7 +20,7 @@ const removeVietnameseTones = (str: string): string  => {
 }
 
 
-export const createNew = async (reqBody: createFoodRequest): Promise<createFoodResponse> => {
+const createNew = async (reqBody: createFoodRequest): Promise<createFoodResponse> => {
   try {
     const payload = {
       ...reqBody,
@@ -38,6 +38,31 @@ export const createNew = async (reqBody: createFoodRequest): Promise<createFoodR
   }
 };
 
+const updateFood = async (foodId: string, reqBody: createFoodRequest): Promise<createFoodResponse> => {
+  try {
+    const payload = {
+      ...reqBody,
+      normalizedName: removeVietnameseTones(reqBody.foodName)
+    };
+    const result = await foodModel.updateFood(foodId, payload);
+
+    if (!result.acknowledged) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Update food failed');
+    }
+    const updatedFood = await foodModel.findOneById(foodId);
+
+    if (!updatedFood) {
+      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Food not found');
+    }
+
+    return updatedFood;
+
+  } catch (error: any) {
+    throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, `Food update failed: ${error.message}`);
+  }
+};
+
 export const foodService = {
-  createNew
+  createNew,
+  updateFood
 };
