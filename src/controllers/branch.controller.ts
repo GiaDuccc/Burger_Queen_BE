@@ -35,8 +35,29 @@ const getBranchDetail = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+const getAllCities = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cities = await branchModel.getAllCities();
+    res.status(StatusCodes.OK).json(cities);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Error retrieving cities"));
+  }
+};
+
+const getBranchByCity = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const city = req.query.city as string;
+    const branches = await branchModel.getBranchByCity(city);
+    res.status(StatusCodes.OK).json(branches);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error retrieving branches by city'));
+  }
+};
+
 export const branchController = {
   createNew,
   getAllBranch,
-  getBranchDetail
+  getBranchDetail,
+  getAllCities,
+  getBranchByCity
 };

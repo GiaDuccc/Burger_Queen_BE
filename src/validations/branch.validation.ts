@@ -15,6 +15,11 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
       'string.min': "branchName must be at least 3 characters",
       'string.max': "branchName must be at most 256 characters"
     }),
+    city: Joi.string().min(2).max(100).required().messages({
+      'any.required': "city is required",
+      'string.min': "city must be at least 2 characters",
+      'string.max': "city must be at most 100 characters"
+    }),
     address: Joi.string().min(3).required().messages({
       'any.required': "address is required",
       'string.min': "address must be at least 3 characters",
