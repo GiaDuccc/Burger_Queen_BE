@@ -67,9 +67,12 @@ const signIn = async (username: string, password: string): Promise<userEntity> =
       { phoneNumber: username }
     ]
   })
+  if (!user) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid username')
+  }
 
-  if (!user || !(await argon2.verify(user.password, password))) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid username or password')
+  if (!(await argon2.verify(user.password, password))) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid password')
   }
 
   return user;
