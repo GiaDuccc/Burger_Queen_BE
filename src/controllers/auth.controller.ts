@@ -5,7 +5,6 @@ import { userService } from '~/services/user.service';
 import { token } from '~/utils/token';
 import { employeeModel } from '~/models/employee.model';
 import { authModel } from '~/models/auth.model';
-import { JwtPayload } from 'jsonwebtoken';
 
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
-import cors from 'cors';
+import cors from 'cors'
+import { corsOptions } from './config/cors';
 import { env } from './config/environment';
 import { CONNECT_DB, CLOSE_DB } from './config/mongodb';
 import exitHook from 'async-exit-hook';
@@ -13,7 +14,7 @@ const START_SERVER = () => {
   // Middleware
   app.use(express.json());
   app.use(cookieParser());
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.urlencoded({ extended: true }));
   app.use('/v1/', APIs_v1);
   app.use(errorHandlingMiddleware);
