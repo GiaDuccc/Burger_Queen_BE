@@ -40,7 +40,6 @@ const createNew = async (data: createFoodRequest): Promise<InsertOneResult<foodE
 
 const findOneById = async (foodId: string): Promise<foodEntity | null> => {
   try {
-    console.log("foodId: ", foodId);
     return await GET_DB().collection<foodEntity>(FOOD_COLLECTION_NAME).findOne({
       _id: new ObjectId(foodId)
     });
