@@ -42,6 +42,7 @@ const findEmployeeByUserId = async (userId: string): Promise<employeeEntity | nu
 
 
 export const employeeModel = {
+  EMPLOYEE_COLLECTION_NAME,
   getAllEmployee,
   findOneById,
   createNew,

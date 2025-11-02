@@ -7,7 +7,8 @@ export interface employeeEntity {
   role: string,
   status: string,
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+  refreshTokenAdmin?: string,
 }
 
 // làm tiếp API cơ bản của employee 

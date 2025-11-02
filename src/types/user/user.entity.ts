@@ -11,4 +11,6 @@ export interface userEntity {
   status: boolean;
   createdAt: Date;
   updatedAt: Date;
+  refreshToken?: string;
+  refreshTokenAdmin?: string;
 }

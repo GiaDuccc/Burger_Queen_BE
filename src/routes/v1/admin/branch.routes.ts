@@ -1,11 +1,12 @@
 import express from 'express';
 import { branchController } from '~/controllers/branch.controller';
+import { authenticateTokenAdmin, authorizeRoles } from '~/middlewares/auth.middleware';
 import { branchValidation } from '~/validations/branch.validation';
 
 const Router = express.Router();
 
 Router.route('/')
-  .get( branchController.getAllBranch )
+  .get( authenticateTokenAdmin, authorizeRoles('admin', 'manager'), branchController.getAllBranch )
   .post( branchValidation.createNew, branchController.createNew );
 
 Router.route('/getBranchByCity/')
