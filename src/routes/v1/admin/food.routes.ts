@@ -9,7 +9,7 @@ Router.use(authenticateTokenAdmin);
 
 Router.route('/')
   .get(foodController.getAllFood)
-  .post( authorizeRoles('admin', 'manager'), foodValidation.createNew, foodController.createNew);
+  .post(authorizeRoles('manager'), foodValidation.createNew, foodController.createNew);
 
 Router.route('/getFoodType')
   .get(foodController.getFoodType);
@@ -22,7 +22,7 @@ Router.route('/searchFood')
 
 Router.route('/:id')
   .get(foodController.getFoodDetail)
-  .put(authorizeRoles('admin', 'manager'), foodValidation.createNew, foodController.updateFood)
-  .delete(authorizeRoles('admin', 'manager'), foodController.deleteFood);
+  .put(authorizeRoles('manager'), foodValidation.createNew, foodController.updateFood)
+  .delete(authorizeRoles('manager'), foodController.deleteFood);
 
 export const foodRoute = Router;

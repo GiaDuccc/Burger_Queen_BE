@@ -5,11 +5,13 @@ import { branchValidation } from '~/validations/branch.validation';
 
 const Router = express.Router();
 
-Router.route('/')
-  .get( authenticateTokenAdmin, authorizeRoles('admin', 'manager'), branchController.getAllBranch )
-  .post( branchValidation.createNew, branchController.createNew );
+Router.use(authenticateTokenAdmin);
 
-Router.route('/getBranchByCity/')
+Router.route('/')
+  .get( branchController.getAllBranch )
+  .post( authorizeRoles('manager'), branchValidation.createNew, branchController.createNew );
+
+Router.route('/getBranchByCity')
   .get( branchController.getBranchByCity );
 
 Router.route('/getAllCities')
