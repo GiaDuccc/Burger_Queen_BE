@@ -5,7 +5,7 @@ import { userValidation } from '~/validations/user.validation';
 
 const Router = express.Router();
 
-// Router.use(authenticateTokenAdmin);
+Router.use(authenticateTokenAdmin);
 
 Router.route('/')
   .get(userController.getAllUser)
