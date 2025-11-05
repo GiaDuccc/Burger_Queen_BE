@@ -9,6 +9,7 @@ export interface userEntity {
   password: string;
   userType: string;
   status: boolean;
+  avatarUrl: string;
   createdAt: Date;
   updatedAt: Date;
   refreshToken?: string;

@@ -4,4 +4,5 @@ export interface createUserRequest {
   phoneNumber: string;
   address: string;
   password: string;
+  avatarUrl?: string;
 }

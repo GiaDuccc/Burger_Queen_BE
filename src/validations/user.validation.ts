@@ -29,6 +29,9 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
       'any.required': "password is required",
       'string.min': "password must be at least 6 characters"
     }),
+    avatarUrl: Joi.string().uri().messages({
+      'string.uri': "avatarUrl must be a valid URL"
+    })
   });
 
   try {

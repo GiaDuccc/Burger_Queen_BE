@@ -5,11 +5,14 @@ import { userValidation } from '~/validations/user.validation';
 
 const Router = express.Router();
 
-Router.use(authenticateTokenAdmin);
+// Router.use(authenticateTokenAdmin);
 
 Router.route('/')
   .get(userController.getAllUser)
-  .post(authorizeRoles('admin', 'manager'), userValidation.createNew, userController.createNew);
+  .post(userValidation.createNew, userController.createNew);
+
+Router.route('/getAllUserPage')
+  .get(userController.getAllUserPage);
 
 Router.route('/myInfo')
   .get(userController.getMyInfo);

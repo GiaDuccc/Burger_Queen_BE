@@ -6,8 +6,8 @@ export interface createUserResponse {
   email: string;
   phoneNumber: string;
   address: string;
-  password: string;
   userType: string;
+  avatarUrl: string;
   status: boolean;
   createdAt: Date;
   updatedAt: Date;
