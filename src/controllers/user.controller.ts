@@ -43,9 +43,30 @@ const getMyInfo = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getAllUserPage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const filter = req.query.filter as string;
+    const skip = (page - 1) * limit;
+
+    const { users, totalRecords } = await userModel.getAllUserPage(filter, skip, limit);
+
+    return res.status(StatusCodes.OK).json({
+      users,
+      currentPage: page,
+      limit: limit,
+      totalPages: Math.ceil(totalRecords / limit)
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const userController = {
   createNew,
   getAllUser,
   getUserDetail,
-  getMyInfo
+  getMyInfo,
+  getAllUserPage
 }
