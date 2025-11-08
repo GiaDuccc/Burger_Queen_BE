@@ -17,6 +17,9 @@ Router.route('/getBranchByCity')
 Router.route('/getAllCities')
   .get( branchController.getAllCities );
 
+Router.route('/getBranchNameById/:id')
+  .get( branchController.getBranchNameById );
+
 Router.route('/:id')
   .get ( branchController.getBranchDetail );
 

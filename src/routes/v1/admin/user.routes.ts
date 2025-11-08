@@ -18,7 +18,7 @@ Router.route('/myInfo')
   .get(userController.getMyInfo);
 
 Router.route('/:id')
-  .get(authorizeRoles('admin', 'manager'), userController.getUserDetail);
+  .get(userController.getUserDetail);
 
 
 export const userRoute = Router;

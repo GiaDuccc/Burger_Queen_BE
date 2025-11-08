@@ -2,16 +2,17 @@ import { ObjectId } from "mongodb";
 
 export interface employeeEntity {
   _id?: ObjectId,
-  userId: ObjectId,
-  branchId: ObjectId,
-  role: string,
-  status: string,
-  createdAt: Date,
-  updatedAt: Date,
-  refreshTokenAdmin?: string,
+  branchId: ObjectId;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  address: string;
+  role: string;
+  status: string;
+  avatarUrl: string;
+  createdAt: Date;
+  updatedAt: Date;
+  refreshTokenAdmin?: string;
 }
-
-// làm tiếp API cơ bản của employee 
-// Sửa tất cả về _id không để kiểu userId
-// hoàn thành JWT
 
