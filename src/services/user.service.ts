@@ -6,7 +6,6 @@ import { userEntity } from '~/types/user/user.entity';
 import { token } from '~/utils/token';
 import ApiError from '~/utils/ApiError';
 import { StatusCodes } from 'http-status-codes';
-import { employeeModel } from '~/models/employee.model';
 
 const createNew = async (user: createUserRequest): Promise<createUserResponse> => {
   try {
@@ -35,13 +34,7 @@ const getMyInfo = async (authorizationHeader: string): Promise <userEntity> => {
   try {
     const decoded = token.verifyAccessTokenAdmin(authorizationHeader?.split(" ")[1] || "");
 
-    const employeeId = decoded.sub?.toString().trim() || "";
-
-    // Admin tokens carry employeeId in sub; fetch employee first, then the linked user
-    const employee = await employeeModel.findOneById(employeeId);
-    if (!employee) throw new ApiError(StatusCodes.NOT_FOUND, 'Employee not found');
-
-    const myInfo = await userModel.findOneById(employee.userId.toString());
+    const myInfo = await userModel.findOneById(decoded.sub?.toString().trim() || "");
     if (!myInfo) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
 
     return myInfo;

@@ -31,17 +31,17 @@ const verifyRefreshToken = (token: string) => {
   return jwt.verify(token, REFRESH_TOKEN_SECRET);
 }
 
-const generateAccessTokenAdmin = (user: { employeeId: string; role: string }) => {
+const generateAccessTokenAdmin = (employee: { employeeId: string; branchId: string; role: string }) => {
   return jwt.sign(
-    { sub: user.employeeId, role: user.role },
+    { sub: employee.employeeId, branchId: employee.branchId, role: employee.role },
     ACCESS_TOKEN_SECRET_ADMIN,
     { expiresIn: '1m' }
   );
 }
 
-const generateRefreshTokenAdmin = (user: { employeeId: string; role: string }) => {
+const generateRefreshTokenAdmin = (employee: { employeeId: string; branchId: string; role: string }) => {
   return jwt.sign(
-    { sub: user.employeeId, role: user.role },
+    { sub: employee.employeeId, branchId: employee.branchId, role: employee.role },
     REFRESH_TOKEN_SECRET_ADMIN,
     { expiresIn: '24h' }
   );

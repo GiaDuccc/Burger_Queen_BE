@@ -6,21 +6,42 @@ import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators"
 
 const createNew = async (req: Request, res: Response, next: NextFunction) => {
   const schema = Joi.object({
-    userId: Joi.string().pattern(OBJECT_ID_RULE).required().messages({
-      'any.required': "userId is required",
-      'string.pattern.base': OBJECT_ID_RULE_MESSAGE
-    }),
     branchId: Joi.string().pattern(OBJECT_ID_RULE).required().messages({
       'any.required': "branchId is required",
       'string.pattern.base': OBJECT_ID_RULE_MESSAGE
     }),
-    role: Joi.string().valid('manager','admin', 'staff').required().messages({
+    fullName: Joi.string().min(2).max(100).required().messages({
+      'any.required': "fullName is required",
+      'string.min': "fullName must be at least 2 characters",
+      'string.max': "fullName must be at most 100 characters"
+    }),
+    email: Joi.string().email().required().messages({
+      'any.required': "email is required",
+      'string.email': "email must be a valid email"
+    }),
+    phoneNumber: Joi.string().min(10).max(15).required().messages({
+      'any.required': "phoneNumber is required",
+      'string.min': "phoneNumber must be at least 10 characters",
+      'string.max': "phoneNumber must be at most 15 characters"
+    }),
+    address: Joi.string().min(3).max(256).required().messages({
+      'any.required': "address is required",
+      'string.min': "address must be at least 3 characters",
+      'string.max': "address must be at most 256 characters"
+    }),
+    password: Joi.string().min(6).required().messages({
+      'any.required': "password is required",
+      'string.min': "password must be at least 6 characters"
+    }),
+    role: Joi.string().valid('manager', 'admin', 'staff').required().messages({
       'any.required': "role is required",
       'any.only': "role must be one of 'manager','admin', 'staff'"
     }),
-    status: Joi.string().valid('working', 'on leave', 'resigned').required().messages({
-      'any.required': "status is required",
+    status: Joi.string().valid('working', 'on leave', 'resigned').messages({
       'any.only': "status must be one of 'working', 'on leave', 'resigned'"
+    }),
+    avatarUrl: Joi.string().uri().messages({
+      'string.uri': "avatarUrl must be a valid URL"
     })
   })
   try {

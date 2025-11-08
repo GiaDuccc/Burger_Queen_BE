@@ -54,10 +54,24 @@ const getBranchByCity = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+const getBranchNameById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const branchId = req.params.id;
+    const branch = await branchModel.findOneById(branchId);
+    if (!branch) {
+      return next(new ApiError(StatusCodes.NOT_FOUND, 'branch not found'));
+    }
+    res.status(StatusCodes.OK).json(branch.branchName);
+  } catch (error: any) {
+    next(new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error retrieving branch details'));
+  }
+};
+
 export const branchController = {
   createNew,
   getAllBranch,
   getBranchDetail,
   getAllCities,
-  getBranchByCity
+  getBranchByCity,
+  getBranchNameById
 };

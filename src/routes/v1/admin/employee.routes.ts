@@ -1,17 +1,31 @@
 import express from 'express';
 import { employeeController } from '~/controllers/employee.controller';
 import { authenticateTokenAdmin, authorizeRoles } from '~/middlewares/auth.middleware';
-import { employeeValidation } from '~/validations/employee.validation';  
+import { employeeValidation } from '~/validations/employee.validation';
 
 const Router = express.Router();
 
-Router.use(authenticateTokenAdmin);
+// Router.use(authenticateTokenAdmin);
+
+// Router.route('/')
+//   .get(employeeController.getAllEmployee)
+//   .post(authorizeRoles('admin', 'manager'), employeeValidation.createNew, employeeController.createNew);
+
+// Router.route('/getAllEmployeePage')
+//   .get(employeeController.getAllEmployeePage);
+
+// Router.route('/:id')
+//   .get(authorizeRoles('admin', 'manager'), employeeController.getEmployeeDetail);
 
 Router.route('/')
-  .get( employeeController.getAllEmployee )
-  .post( authorizeRoles('admin', 'manager'), employeeValidation.createNew, employeeController.createNew );
+  .get(employeeController.getAllEmployee)
+  .post(employeeValidation.createNew, employeeController.createNew);
+
+Router.route('/getAllEmployeePage')
+  .get(employeeController.getAllEmployeePage);
 
 Router.route('/:id')
-  .get (authorizeRoles('admin', 'manager'), employeeController.getEmployeeDetail );
+  .get(employeeController.getEmployeeDetail);
+
 
 export const employeeRoute = Router;
