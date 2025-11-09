@@ -25,5 +25,8 @@ Router.route('/signInAdmin')
 Router.route('/refreshAdmin')
   .post(authController.refreshAdmin);
 
+Router.route('/signOutAdmin')
+  .post(authenticateTokenAdmin, authController.signOutAdmin);
+
 
 export const authRoute = Router;
