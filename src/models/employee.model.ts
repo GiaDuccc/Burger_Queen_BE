@@ -82,10 +82,16 @@ const findOneById = async (employeeId: string): Promise<employeeResponse | null>
   )
 }
 
-const getAllEmployeePage = async (filter: string, skip: number, limit: number): Promise<{
+const getAllEmployeePage = async (filter: string, skip: number, limit: number, branchId: string): Promise<{
   employees: employeeResponse[],
   totalRecords: number
 }> => {
+
+  const query: any = { status: "working" }
+  if (branchId) {
+    query.branchId = new ObjectId(branchId);
+  }
+
   let sortOrder: any = {};
   if (filter === "newest") {
     sortOrder = { createdAt: -1 };
@@ -97,9 +103,7 @@ const getAllEmployeePage = async (filter: string, skip: number, limit: number): 
     sortOrder = { fullName: -1 };
   }
 
-  const employees = await GET_DB().collection<employeeResponse>(EMPLOYEE_COLLECTION_NAME).find({
-    status: "working"
-  })
+  const employees = await GET_DB().collection<employeeResponse>(EMPLOYEE_COLLECTION_NAME).find(query)
     .sort(sortOrder) // Sắp xếp theo thứ tự đã chỉ định
     .skip(skip)
     .limit(limit)

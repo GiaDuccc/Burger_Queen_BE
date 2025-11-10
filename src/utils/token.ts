@@ -35,7 +35,7 @@ const generateAccessTokenAdmin = (employee: { employeeId: string; branchId: stri
   return jwt.sign(
     { sub: employee.employeeId, branchId: employee.branchId, role: employee.role },
     ACCESS_TOKEN_SECRET_ADMIN,
-    { expiresIn: '1m' }
+    { expiresIn: '15m' }
   );
 }
 
@@ -43,7 +43,7 @@ const generateRefreshTokenAdmin = (employee: { employeeId: string; branchId: str
   return jwt.sign(
     { sub: employee.employeeId, branchId: employee.branchId, role: employee.role },
     REFRESH_TOKEN_SECRET_ADMIN,
-    { expiresIn: '24h' }
+    { expiresIn: '6h' }
   );
 }
 

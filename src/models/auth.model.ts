@@ -33,9 +33,9 @@ const clearRefreshToken = async (userId: string) => {
   )
 }
 
-const clearRefreshTokenAdmin = async (userId: string) => {
+const clearRefreshTokenAdmin = async (employeeId: string) => {
   await GET_DB().collection(employeeModel.EMPLOYEE_COLLECTION_NAME).updateOne(
-    { _id: new ObjectId(userId) },
+    { _id: new ObjectId(employeeId) },
     { $set: { 
       refreshTokenAdmin: null,
       updatedAt: new Date()

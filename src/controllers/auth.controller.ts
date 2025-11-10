@@ -128,7 +128,7 @@ const signInAdmin = async (req: Request, res: Response, next: NextFunction) => {
       httpOnly: true,
       secure: false, // true nếu có HTTPS
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 6 * 60 * 60 * 1000 // 6 hours
     });
 
     await authModel.saveRefreshTokenAdmin(employee._id?.toString() || "", refreshToken);
@@ -137,7 +137,8 @@ const signInAdmin = async (req: Request, res: Response, next: NextFunction) => {
     res.status(StatusCodes.OK).json({
       introduce: `Welcome admin ${employee.fullName}!`,
       message: 'Sign in success',
-      accessToken
+      accessToken,
+      employee: employee
     });
 
   } catch (error: any) {
@@ -184,7 +185,7 @@ const refreshAdmin = async (req: Request, res: Response, next: NextFunction) => 
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 6 * 60 * 60 * 1000,
     });
 
     res.status(StatusCodes.OK).json({
@@ -208,6 +209,33 @@ const getMyInfoEmployee = async (req: Request, res: Response, next: NextFunction
   }
 }
 
+const signOutAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const refreshToken = req.cookies.refreshTokenAdmin;
+
+    // Không có token => không cần xử lý
+    if (!refreshToken) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "No refresh token provided" });
+    }
+
+    // Giải mã token để lấy employeeId (sub)
+    const decoded = token.verifyRefreshTokenAdmin(refreshToken) as JwtPayload;
+
+    // Xóa cookie refreshTokenAdmin
+    res.clearCookie("refreshTokenAdmin");
+
+    // Nếu có sub thì gọi model clear refresh token
+    if (decoded?.sub) {
+      await authModel.clearRefreshTokenAdmin(decoded.sub);
+    }
+
+    return res.status(StatusCodes.OK).json({ message: "Sign out successful" });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const authController = {
   // signIn,
   // signUp,
@@ -215,5 +243,6 @@ export const authController = {
   // refresh,
   refreshAdmin,
   signInAdmin,
-  getMyInfoEmployee
+  getMyInfoEmployee,
+  signOutAdmin
 }
