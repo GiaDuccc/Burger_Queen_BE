@@ -36,9 +36,10 @@ const getAllEmployeePage = async (req: Request, res: Response, next: NextFunctio
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const filter = req.query.filter as string || "";
+    const branchId = req.query.branchId as string || "";
     const skip = (page - 1) * limit;
 
-    const employees = await employeeModel.getAllEmployeePage(filter, skip, limit);
+    const employees = await employeeModel.getAllEmployeePage(filter, skip, limit, branchId);
     res.status(StatusCodes.OK).json(employees);
   } catch (error) {
     next(error);
