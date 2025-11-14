@@ -33,13 +33,20 @@ const getEmployeeDetail = async (req: Request, res: Response, next: NextFunction
 
 const getAllEmployeePage = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
     const filter = req.query.filter as string || "";
     const branchId = req.query.branchId as string || "";
-    const skip = (page - 1) * limit;
 
-    const employees = await employeeModel.getAllEmployeePage(filter, skip, limit, branchId);
+    const employees = await employeeModel.getAllEmployeePage(filter, branchId);
+    res.status(StatusCodes.OK).json(employees);
+  } catch (error) {
+    next(error);
+  }
+}
+
+const getEmployeeByBranchId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const branchId = req.params.branchId;
+    const employees = await employeeModel.getEmployeeByBranchId(branchId);
     res.status(StatusCodes.OK).json(employees);
   } catch (error) {
     next(error);
@@ -50,5 +57,6 @@ export const employeeController = {
   getAllEmployee,
   createNew,
   getEmployeeDetail,
-  getAllEmployeePage
+  getAllEmployeePage,
+  getEmployeeByBranchId
 }
