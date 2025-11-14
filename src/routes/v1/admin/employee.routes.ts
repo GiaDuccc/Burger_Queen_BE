@@ -24,6 +24,9 @@ Router.route('/')
 Router.route('/getAllEmployeePage')
   .get(employeeController.getAllEmployeePage);
 
+Router.route('/getEmployeeByBranchId/:branchId')
+  .get(employeeController.getEmployeeByBranchId);
+
 Router.route('/:id')
   .get(employeeController.getEmployeeDetail);
 

@@ -82,12 +82,12 @@ const findOneById = async (employeeId: string): Promise<employeeResponse | null>
   )
 }
 
-const getAllEmployeePage = async (filter: string, skip: number, limit: number, branchId: string): Promise<{
+const getAllEmployeePage = async (filter: string, branchId: string): Promise<{
   employees: employeeResponse[],
   totalRecords: number
 }> => {
 
-  const query: any = { status: "working" }
+  const query: any = {}
   if (branchId) {
     query.branchId = new ObjectId(branchId);
   }
@@ -104,9 +104,7 @@ const getAllEmployeePage = async (filter: string, skip: number, limit: number, b
   }
 
   const employees = await GET_DB().collection<employeeResponse>(EMPLOYEE_COLLECTION_NAME).find(query)
-    .sort(sortOrder) // Sắp xếp theo thứ tự đã chỉ định
-    .skip(skip)
-    .limit(limit)
+    .sort(sortOrder)
     .project({ password: 0, refreshTokenAdmin: 0 }) // Loại bỏ trường password
     .toArray() as employeeResponse[];
 
@@ -120,6 +118,13 @@ const getRefreshToken = async (employeeId: string): Promise<string | null> => {
   ).then(result => result?.refreshTokenAdmin || null);
 }
 
+const getEmployeeByBranchId = async (branchId: string): Promise<employeeResponse[]> => {
+  return await GET_DB().collection<employeeResponse>(EMPLOYEE_COLLECTION_NAME).find(
+    { branchId: new ObjectId(branchId)},
+    { projection: { password: 0, refreshTokenAdmin: 0 } }
+  ).toArray();
+}
+
 export const employeeModel = {
   EMPLOYEE_COLLECTION_NAME,
   getAllEmployee,
@@ -127,5 +132,6 @@ export const employeeModel = {
   createNew,
   getAllEmployeePage,
   signIn,
-  getRefreshToken
+  getRefreshToken,
+  getEmployeeByBranchId
 }
